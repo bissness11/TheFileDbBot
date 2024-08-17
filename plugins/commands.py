@@ -22,7 +22,15 @@ import base64
 from urllib.parse import quote_plus
 from TechVJ.utils.file_properties import get_name, get_hash, get_media_file_size
 logger = logging.getLogger(__name__)
-
+# Define the channel IDs
+FORCE_SUB_CHANNEL_IDS = {
+    "channel": "Animecolony",
+    "channel2": "TOWER_OF_GOD_Eng_Dub_1",
+    "channel3": "AlyaSometimesHidesHerFeelingsdub",
+    "channel4": "FZXAnime",
+   # "channel5": "frierenbeyondjourneysend1",
+#    "channel6": "MeijiGekken1874dub",
+}
 BATCH_FILES = {}
 
 # Don't Remove Credit Tg - @VJ_Botz
@@ -48,6 +56,22 @@ def get_size(size):
 
 @Client.on_message(filters.command("start") & filters.incoming)
 async def start(client, message):
+    for sub_channel_id in FORCE_SUB_CHANNEL_IDS.values():
+        try:
+            user = await client.get_chat_member(sub_channel_id, message.from_user.id)
+            if user.status == "kicked out":
+                await message.reply_text("Your are banned")
+                return
+        except UserNotParticipant:
+            await message.reply_text(
+                text="Thanks for Joining ☺️ @animedualaudiozippercartoonist but You are not Subscribed to these Channels Join these channels and Support our Anime Channel and our Anime service 😀 thanks and Enjoy Watching Anime \n @FZXAnime \n @animecolony \n @AlyaSometimesHidesHerFeelingsdub \n @unwantedundeadadventurer \n @TOWER_OF_GOD_Eng_Dub_1 ",
+                reply_markup=InlineKeyboardMarkup(
+                    [[
+                        InlineKeyboardButton("Update Channel", url=f"t.me/{sub_channel_id}")
+                    ]]
+                ),
+            )
+            return
     username = (await client.get_me()).username
     if not await db.is_user_exist(message.from_user.id):
         await db.add_user(message.from_user.id, message.from_user.first_name)
