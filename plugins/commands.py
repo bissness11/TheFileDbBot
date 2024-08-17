@@ -27,7 +27,7 @@ FORCE_SUB_CHANNEL_IDS = {
     "channel": "Animecolony",
     "channel2": "TOWER_OF_GOD_Eng_Dub_1",
     "channel3": "AlyaSometimesHidesHerFeelingsdub",
-    "channel4": "FZXAnime",
+   # "channel4": "FZXAnime",
    # "channel5": "frierenbeyondjourneysend1",
 #    "channel6": "MeijiGekken1874dub",
 }
