@@ -23,6 +23,7 @@ from urllib.parse import quote_plus
 from TechVJ.utils.file_properties import get_name, get_hash, get_media_file_size
 logger = logging.getLogger(__name__)
 # Define the channel IDs
+from helper_func import subscribed
 FORCE_SUB_CHANNEL_IDS = {
     "channel": "Animecolony",
     "channel2": "TOWER_OF_GOD_Eng_Dub_1",
