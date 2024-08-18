@@ -23,10 +23,11 @@ from plugins.commands import *
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
-log_msg = await client.send_cached_media(
-    chat_id=LOG_CHANNEL,
-    file_id=msg.get("file_id"),
-)
+async def log_media(client, chat_id, file_id):
+    log_msg = await client.send_cached_media(
+        chat_id=chat_id,
+        file_id=file_id
+    )
 fileName = {quote_plus(get_name(log_msg))}
 stream = f"{URL}watch/{str(log_msg.id)}/{quote_plus(get_name(log_msg))}?hash={get_hash(log_msg)}"
 download = f"{URL}{str(log_msg.id)}/{quote_plus(get_name(log_msg))}?hash={get_hash(log_msg)}"
