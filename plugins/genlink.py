@@ -28,14 +28,20 @@ async def log_media(client, chat_id, file_id):
         chat_id=chat_id,
         file_id=file_id
     )
-fileName = {quote_plus(get_name(log_msg))}
-stream = f"{URL}watch/{str(log_msg.id)}/{quote_plus(get_name(log_msg))}?hash={get_hash(log_msg)}"
-download = f"{URL}{str(log_msg.id)}/{quote_plus(get_name(log_msg))}?hash={get_hash(log_msg)}"
-button = [
-    [
-        InlineKeyboardButton("🚀 Fast Download 🚀", url=download),  # we download Link
-        InlineKeyboardButton('🖥️ Watch online 🖥️', url=stream)
+
+    fileName = quote_plus(get_name(log_msg))  # Assuming get_name is defined elsewhere
+
+    stream = f"{URL}watch/{str(log_msg.id)}/{quote_plus(fileName)}?hash={get_hash(log_msg)}"
+    download = f"{URL}{str(log_msg.id)}/{quote_plus(fileName)}?hash={get_hash(log_msg)}"
+
+    button = [
+        [
+            InlineKeyboardButton(" Fast Download ", url=download),
+            InlineKeyboardButton('️ Watch online ️', url=stream)
+        ]
     ]
+
+    # You can return values or use log_msg within the function
 ]
 
 # Create the markup
