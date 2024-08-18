@@ -9,6 +9,9 @@ from pyrogram.types import *
 from config import ADMINS, LOG_CHANNEL, PUBLIC_FILE_STORE, WEBSITE_URL, WEBSITE_URL_MODE
 from plugins.database import unpack_new_file_id
 from plugins.users_api import get_user, get_short_link
+from TechVJ.utils.file_properties import get_name, get_hash, get_media_file_size
+from plugins.users_api import get_user, update_user_info
+from config import *
 import re
 import os
 import json
