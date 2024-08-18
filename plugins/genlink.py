@@ -41,8 +41,7 @@ async def log_media(client, chat_id, file_id):
 
     # You can return values or use log_msg within the function
 
-# Create the markup
-markup = InlineKeyboardMarkup(inline_keyboard=button)
+
 async def allowed(_, __, message):
     if PUBLIC_FILE_STORE:
         return True
