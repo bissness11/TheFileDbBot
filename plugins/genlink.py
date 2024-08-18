@@ -15,23 +15,13 @@ import os
 import json
 import base64
 import logging
-
+from commands import *
 # Don't Remove Credit Tg - @VJ_Botz
 # Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
 # Ask Doubt on telegram @KingVJ01
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
-user_id = message.from_user.id
-username =  message.from_user.mention 
-async def log_media(client, chat_id, file_id):
-    log_msg = await client.send_cached_media(
-        chat_id=chat_id,
-        file_id=file_id
-    )
-fileName = {quote_plus(get_name(log_msg))}
-stream = f"{URL}watch/{str(log_msg.id)}/{quote_plus(get_name(log_msg))}?hash={get_hash(log_msg)}"
-download = f"{URL}{str(log_msg.id)}/{quote_plus(get_name(log_msg))}?hash={get_hash(log_msg)}"
 button = [
     [
         InlineKeyboardButton("🚀 Fast Download 🚀", url=download),  # we download Link
