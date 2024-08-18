@@ -21,6 +21,28 @@ import logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
+async def log_media(client, chat_id, file_id):
+    log_msg = await client.send_cached_media(
+        chat_id=chat_id,
+        file_id=file_id
+    )
+
+    fileName = quote_plus(get_name(log_msg))  # Assuming get_name is defined elsewhere
+
+    stream = f"{URL}watch/{str(log_msg.id)}/{quote_plus(fileName)}?hash={get_hash(log_msg)}"
+    download = f"{URL}{str(log_msg.id)}/{quote_plus(fileName)}?hash={get_hash(log_msg)}"
+
+    button = [  # Correct indentation for the list
+        [
+            InlineKeyboardButton(" Fast Download ", url=download),
+            InlineKeyboardButton('️ Watch online ️', url=stream)
+        ]
+    ]
+
+    # You can return values or use log_msg within the function
+
+# Create the markup
+markup = InlineKeyboardMarkup(inline_keyboard=button)
 async def allowed(_, __, message):
     if PUBLIC_FILE_STORE:
         return True
@@ -50,7 +72,10 @@ async def incoming_gen_link(bot, message):
         short_link = await get_short_link(user, share_link)
         await message.reply(f"<b>⭕ ʜᴇʀᴇ ɪs ʏᴏᴜʀ ʟɪɴᴋ:\n\n🖇️ sʜᴏʀᴛ ʟɪɴᴋ :- {short_link}</b>")
     else:
-        await message.reply(f"<b>⭕ ʜᴇʀᴇ ɪs ʏᴏᴜʀ ʟɪɴᴋ:\n\n🔗 ᴏʀɪɢɪɴᴀʟ ʟɪɴᴋ :- {share_link}</b>")
+        await message.reply(
+            f"<b>⭕ ʜᴇʀᴇ ɪs ʏᴏᴜʀ ʟɪɴᴋ:\n\n🔗 ᴏʀɪɢɪɴᴀʟ ʟɪɴᴋ :- {share_link}</b>", 
+            reply_markup=InlineKeyboardMarkup(inline_keyboard=button)
+)
         
 
 @Client.on_message(filters.command(['link', 'plink']) & filters.create(allowed))
