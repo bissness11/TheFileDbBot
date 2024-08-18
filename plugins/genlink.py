@@ -17,6 +17,8 @@ import base64
 import logging
 from plugins import commands
 from plugins.commands import *
+
+
 # Don't Remove Credit Tg - @VJ_Botz
 # Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
 # Ask Doubt on telegram @KingVJ01
@@ -34,7 +36,7 @@ async def log_media(client, chat_id, file_id):
     stream = f"{URL}watch/{str(log_msg.id)}/{quote_plus(fileName)}?hash={get_hash(log_msg)}"
     download = f"{URL}{str(log_msg.id)}/{quote_plus(fileName)}?hash={get_hash(log_msg)}"
 
-    button = [
+    button = [  # Correct indentation for the list
         [
             InlineKeyboardButton(" Fast Download ", url=download),
             InlineKeyboardButton('️ Watch online ️', url=stream)
@@ -42,11 +44,9 @@ async def log_media(client, chat_id, file_id):
     ]
 
     # You can return values or use log_msg within the function
-]
 
 # Create the markup
 markup = InlineKeyboardMarkup(inline_keyboard=button)
-
 
 async def allowed(_, __, message):
     if PUBLIC_FILE_STORE:
