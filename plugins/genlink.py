@@ -7,6 +7,7 @@ from pyrogram import filters, Client, enums
 from pyrogram.errors.exceptions.bad_request_400 import ChannelInvalid, UsernameInvalid, UsernameNotModified
 from config import ADMINS, LOG_CHANNEL, PUBLIC_FILE_STORE, WEBSITE_URL, WEBSITE_URL_MODE
 from plugins.database import unpack_new_file_id
+from pyrogram.types import *
 from plugins.users_api import get_user, get_short_link
 import re
 import os
@@ -20,6 +21,17 @@ import logging
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
+
+button = [
+    [
+        InlineKeyboardButton("🚀 Fast Download 🚀", url=download),  # we download Link
+        InlineKeyboardButton('🖥️ Watch online 🖥️', url=stream)
+    ]
+]
+
+# Create the markup
+markup = InlineKeyboardMarkup(inline_keyboard=button)
+
 
 async def allowed(_, __, message):
     if PUBLIC_FILE_STORE:
@@ -45,12 +57,18 @@ async def incoming_gen_link(bot, message):
     if WEBSITE_URL_MODE == True:
         share_link = f"{WEBSITE_URL}={outstr}"
     else:
-        share_link = f"https://t.me/{username}?start={outstr}"
-    if user["base_site"] and user["shortener_api"] != None:
-        short_link = await get_short_link(user, share_link)
-        await message.reply(f"<b>⭕ ʜᴇʀᴇ ɪs ʏᴏᴜʀ ʟɪɴᴋ:\n\n🖇️ sʜᴏʀᴛ ʟɪɴᴋ :- {short_link}</b>")
-    else:
-        await message.reply(f"<b>⭕ ʜᴇʀᴇ ɪs ʏᴏᴜʀ ʟɪɴᴋ:\n\n🔗 ᴏʀɪɢɪɴᴀʟ ʟɪɴᴋ :- {share_link}</b>")
+        share_link = f"https://t.me/{username}?start={outstr}"# Your existing code
+if user["base_site"] and user["shortener_api"] != None:
+    short_link = await get_short_link(user, share_link)
+    await message.reply(
+        f"<b>⭕ ʜᴇʀᴇ ɪs ʏᴏᴜʀ ʟɪɴᴋ:\n\n🖇️ sʜᴏʀᴛ ʟɪɴᴋ :- {short_link}</b>",
+        reply_markup=markup
+    )
+else:
+    await message.reply(
+        f"<b>⭕ ʜᴇʀᴇ ɪs ʏᴏᴜʀ ʟɪɴᴋ:\n\n🔗 ᴏʀɪɢɪɴᴀʟ ʟɪɴᴋ :- {share_link}</b>",
+        reply_markup=markup
+    )
         
 
 @Client.on_message(filters.command(['link', 'plink']) & filters.create(allowed))
@@ -203,4 +221,3 @@ async def gen_link_batch(bot, message):
 # Don't Remove Credit Tg - @VJ_Botz
 # Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
 # Ask Doubt on telegram @KingVJ01
-
