@@ -75,14 +75,16 @@ async def incoming_gen_link(bot, message):
         short_link = await get_short_link(user, share_link)
         await message.reply(
             f"<b>⭕ Here is your link:\n\n️ Short link: {short_link}</b>\n",
-            reply_markup=InlineKeyboardMarkup(inline_keyboard=button)
+            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🚀 Fast Download 🚀", url=download),  # we download Link
+                                                InlineKeyboardButton('🖥️ Watch online 🖥️', url=stream)]])  # web stream Link
     )
     else:
         await message.reply(
             f"<b>⭕ ʜᴇʀᴇ ɪs ʏᴏᴜʀ ʟɪɴᴋ:\n\n🔗 ᴏʀɪɢɪɴᴀʟ ʟɪɴᴋ :- {share_link}</b>", 
-            reply_markup=InlineKeyboardMarkup(inline_keyboard=button)
+            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🚀 Fast Download 🚀", url=download),  # we download Link
+                                                InlineKeyboardButton('🖥️ Watch online 🖥️', url=stream)]])  # web stream Link
 )
-        
+
 
 @Client.on_message(filters.command(['link', 'plink']) & filters.create(allowed))
 async def gen_link_s(bot, message):
