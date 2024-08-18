@@ -49,26 +49,38 @@ async def incoming_gen_link(bot, message):
     username = (await bot.get_me()).username
     file_type = message.media
     file_id, ref = unpack_new_file_id((getattr(message, file_type.value)).file_id)
-    string = 'file_'
-    string += file_id
+    string = 'file_' + file_id
     outstr = base64.urlsafe_b64encode(string.encode("ascii")).decode().strip("=")
     user_id = message.from_user.id
     user = await get_user(user_id)
-    if WEBSITE_URL_MODE == True:
+    
+    if WEBSITE_URL_MODE:
         share_link = f"{WEBSITE_URL}={outstr}"
     else:
-        share_link = f"https://t.me/{username}?start={outstr}"# Your existing code
-if user["base_site"] and user["shortener_api"] != None:
-    short_link = await get_short_link(user, share_link)
-    await message.reply(
-        f"<b>⭕ ʜᴇʀᴇ ɪs ʏᴏᴜʀ ʟɪɴᴋ:\n\n🖇️ sʜᴏʀᴛ ʟɪɴᴋ :- {short_link}</b>",
-        reply_markup=markup
-    )
-else:
-    await message.reply(
-        f"<b>⭕ ʜᴇʀᴇ ɪs ʏᴏᴜʀ ʟɪɴᴋ:\n\n🔗 ᴏʀɪɢɪɴᴀʟ ʟɪɴᴋ :- {share_link}</b>",
-        reply_markup=markup
-    )
+        share_link = f"https://t.me/{username}?start={outstr}"
+    
+    # Define your buttons
+    button = [
+        [
+            InlineKeyboardButton("🚀 Fast Download 🚀", url=download),  # we download Link
+            InlineKeyboardButton('🖥️ Watch online 🖥️', url=stream)
+        ]
+    ]
+    
+    # Create the markup
+    markup = InlineKeyboardMarkup(inline_keyboard=button)
+    
+    if user["base_site"] and user["shortener_api"] != None:
+        short_link = await get_short_link(user, share_link)
+        await message.reply(
+            f"<b>⭕ ʜᴇʀᴇ ɪs ʏᴏᴜʀ ʟɪɴᴋ:\n\n🖇️ sʜᴏʀᴛ ʟɪɴᴋ :- {short_link}</b>",
+            reply_markup=markup
+        )
+    else:
+        await message.reply(
+            f"<b>⭕ ʜᴇʀᴇ ɪs ʏᴏᴜʀ ʟɪɴᴋ:\n\n🔗 ᴏʀɪɢɪɴᴀʟ ʟɪɴᴋ :- {share_link}</b>",
+            reply_markup=markup
+        )
         
 
 @Client.on_message(filters.command(['link', 'plink']) & filters.create(allowed))
