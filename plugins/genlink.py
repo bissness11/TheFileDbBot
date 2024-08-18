@@ -11,6 +11,7 @@ from plugins.database import unpack_new_file_id
 from plugins.users_api import get_user, get_short_link
 from TechVJ.utils.file_properties import get_name, get_hash, get_media_file_size
 from plugins.users_api import get_user, update_user_info
+from plugins.commands import *
 from config import *
 import re
 import os
@@ -24,27 +25,6 @@ import logging
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
-
-async def log_media(client, chat_id, file_id):
-    log_msg = await client.send_cached_media(
-        chat_id=chat_id,
-        file_id=file_id
-    )
-
-    fileName = quote_plus(get_name(log_msg))  # Assuming get_name is defined elsewhere
-
-    stream = f"{URL}watch/{str(log_msg.id)}/{quote_plus(fileName)}?hash={get_hash(log_msg)}"
-    download = f"{URL}{str(log_msg.id)}/{quote_plus(fileName)}?hash={get_hash(log_msg)}"
-
-    button = [  # Correct indentation for the list
-        [
-            InlineKeyboardButton(" Fast Download ", url=download),
-            InlineKeyboardButton('️ Watch online ️', url=stream)
-        ]
-    ]
-
-    # You can return values or use log_msg within the function
-
 
 async def allowed(_, __, message):
     if PUBLIC_FILE_STORE:
