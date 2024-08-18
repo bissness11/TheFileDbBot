@@ -7,17 +7,12 @@ from pyrogram import filters, Client, enums
 from pyrogram.errors.exceptions.bad_request_400 import ChannelInvalid, UsernameInvalid, UsernameNotModified
 from config import ADMINS, LOG_CHANNEL, PUBLIC_FILE_STORE, WEBSITE_URL, WEBSITE_URL_MODE
 from plugins.database import unpack_new_file_id
-from pyrogram.types import *
-from config import *
 from plugins.users_api import get_user, get_short_link
 import re
 import os
 import json
 import base64
 import logging
-from plugins import commands
-from plugins.commands import *
-
 
 # Don't Remove Credit Tg - @VJ_Botz
 # Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
@@ -25,26 +20,6 @@ from plugins.commands import *
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
-async def log_media(client, chat_id, file_id):
-    log_msg = await client.send_cached_media(
-        chat_id=chat_id,
-        file_id=file_id
-    )
-
-    fileName = quote_plus(get_name(log_msg))  # Assuming get_name is defined elsewhere
-
-    stream = f"{URL}watch/{str(log_msg.id)}/{quote_plus(fileName)}?hash={get_hash(log_msg)}"
-    download = f"{URL}{str(log_msg.id)}/{quote_plus(fileName)}?hash={get_hash(log_msg)}"
-
-    button = [  # Correct indentation for the list
-        [
-            InlineKeyboardButton(" Fast Download ", url=download),
-            InlineKeyboardButton('️ Watch online ️', url=stream)            
-        ]
-    ]
-
-    # You can return values or use log_msg within the function
-
 
 async def allowed(_, __, message):
     if PUBLIC_FILE_STORE:
@@ -62,38 +37,20 @@ async def incoming_gen_link(bot, message):
     username = (await bot.get_me()).username
     file_type = message.media
     file_id, ref = unpack_new_file_id((getattr(message, file_type.value)).file_id)
-    string = 'file_' + file_id
+    string = 'file_'
+    string += file_id
     outstr = base64.urlsafe_b64encode(string.encode("ascii")).decode().strip("=")
     user_id = message.from_user.id
     user = await get_user(user_id)
-    
-    if WEBSITE_URL_MODE:
+    if WEBSITE_URL_MODE == True:
         share_link = f"{WEBSITE_URL}={outstr}"
     else:
         share_link = f"https://t.me/{username}?start={outstr}"
-    
-    # Define your buttons
-    button = [
-        [
-            InlineKeyboardButton("🚀 Fast Download 🚀", url=download),  # we download Link
-            InlineKeyboardButton('🖥️ Watch online 🖥️', url=stream)
-        ]
-    ]
-    
-    # Create the markup
-    markup = InlineKeyboardMarkup(inline_keyboard=button)
-    
     if user["base_site"] and user["shortener_api"] != None:
         short_link = await get_short_link(user, share_link)
-        await message.reply(
-            f"<b>⭕ ʜᴇʀᴇ ɪs ʏᴏᴜʀ ʟɪɴᴋ:\n\n🖇️ sʜᴏʀᴛ ʟɪɴᴋ :- {short_link}</b>",
-            reply_markup=markup
-        )
+        await message.reply(f"<b>⭕ ʜᴇʀᴇ ɪs ʏᴏᴜʀ ʟɪɴᴋ:\n\n🖇️ sʜᴏʀᴛ ʟɪɴᴋ :- {short_link}</b>")
     else:
-        await message.reply(
-            f"<b>⭕ ʜᴇʀᴇ ɪs ʏᴏᴜʀ ʟɪɴᴋ:\n\n🔗 ᴏʀɪɢɪɴᴀʟ ʟɪɴᴋ :- {share_link}</b>",
-            reply_markup=markup
-        )
+        await message.reply(f"<b>⭕ ʜᴇʀᴇ ɪs ʏᴏᴜʀ ʟɪɴᴋ:\n\n🔗 ᴏʀɪɢɪɴᴀʟ ʟɪɴᴋ :- {share_link}</b>")
         
 
 @Client.on_message(filters.command(['link', 'plink']) & filters.create(allowed))
