@@ -22,6 +22,14 @@ import logging
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
+user_id = message.from_user.id
+username =  message.from_user.mention 
+
+log_msg = await client.send_cached_media(
+    chat_id=LOG_CHANNEL,
+    file_id=msg.get("file_id"),
+)
+fileName = {quote_plus(get_name(log_msg))}
 stream = f"{URL}watch/{str(log_msg.id)}/{quote_plus(get_name(log_msg))}?hash={get_hash(log_msg)}"
 download = f"{URL}{str(log_msg.id)}/{quote_plus(get_name(log_msg))}?hash={get_hash(log_msg)}"
 button = [
