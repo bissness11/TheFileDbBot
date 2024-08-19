@@ -66,6 +66,29 @@ async def incoming_gen_link(bot, message):
 )
 
 
+@Client.on_message(filters.command("downloadlink") & filters.reply & filters.private)
+async def send_download_link(bot, message):
+    if message.reply_to_message and message.reply_to_message.media:
+        # Your existing code to generate the download and stream links
+        log_msg = await client.send_cached_media(
+        chat_id=LOG_CHANNEL,
+        file_id=msg.get("file_id"),
+                    )
+        fileName = {quote_plus(get_name(log_msg))}
+        stream = f"{URL}watch/{str(log_msg.id)}/{quote_plus(get_name(log_msg))}?hash={get_hash(log_msg)}"
+        download = f"{URL}{str(log_msg.id)}/{quote_plus(get_name(log_msg))}?hash={get_hash(log_msg)}"
+        
+        await message.reply(
+            text="Choose an option:",
+            reply_markup=InlineKeyboardMarkup([
+                [InlineKeyboardButton(" Fast Download ", url=download)],
+                [InlineKeyboardButton(' Watch online ', url=stream)]
+            ])
+        )
+    else:
+        await message.reply("Please reply to a file with /downloadlink")
+
+
 @Client.on_message(filters.command(['link', 'plink']) & filters.create(allowed))
 async def gen_link_s(bot, message):
     username = (await bot.get_me()).username
